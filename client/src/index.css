@@ -1,0 +1,36 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active{
+background-color: rgb(235, 235, 235 , 0.1);
+border-right: 4px solid green;
+}
+/* Target the date input */
+input[type="date"] {
+  color: white; /* Change the text color to white */
+}
+
+/* Target the date input arrow (dropdown) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Invert the colors to make it white */
+}
+
+/* Target the clear button (only for Webkit browsers) */
+input[type="date"]::-webkit-clear-button {
+  filter: invert(1); /* Invert the colors to make it white */
+}
+
+.dorpDownProfil::before{
+  position: absolute;
+  content: "";
+  width: 20px;
+  top:-8px ;
+  height: 20px;
+  left: 20px;
+  background-color:white;
+  transform: rotate(45deg) ;
+  z-index:20;
+  
+}
