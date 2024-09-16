@@ -118,6 +118,7 @@ const editTask = (req, res, next) => {
     },
   );
 };
+
 module.exports = {
   getAllTasks,
   createTask,
