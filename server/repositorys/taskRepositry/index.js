@@ -31,7 +31,6 @@ const deleteTask = async (userId, id) => {
       where: { id },
     });
   } catch (err) {
-    console.log(err);
     throw new CustomError(err.messgae, err.status, err);
   }
 };
@@ -45,7 +44,6 @@ const updateTask = async (id, newTaskData) => {
 
     return updatedTask;
   } catch (err) {
-    console.log(err);
     throw new CustomError(err.messgae, err.status, err);
   }
 };

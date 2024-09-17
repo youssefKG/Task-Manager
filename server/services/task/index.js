@@ -16,7 +16,6 @@ const deleteTask = async (userId, taskId) => {
   try {
     await taskRepository.deleteTask(userId, taskId);
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
@@ -36,7 +35,6 @@ const createTask = async (taskData) => {
 
     return task;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
@@ -44,7 +42,6 @@ const createTask = async (taskData) => {
 const updateTask = async (id, newTaskData) => {
   try {
     const { error } = validator.UpdateTaskSchema.validate(newTaskData);
-    console.log("validation error ", error);
 
     if (error)
       throw new CustomError(
@@ -57,7 +54,6 @@ const updateTask = async (id, newTaskData) => {
 
     return updatedTask;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };

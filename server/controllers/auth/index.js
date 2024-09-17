@@ -33,7 +33,6 @@ const login = async (req, res, next) => {
       result: othersUserInfo,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };

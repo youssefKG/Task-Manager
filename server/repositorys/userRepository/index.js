@@ -14,7 +14,6 @@ const createUser = async ({ firstName, lastName, email, password }) => {
     );
     return newUser;
   } catch (err) {
-    console.log(err);
     throw new CustomError(err.message, err.status, err?.result);
   }
 };
@@ -35,7 +34,6 @@ const findUserById = async (userID) => {
 
     return user;
   } catch (err) {
-    console.log(err);
     throw new CustomError(err.message, err.status, err?.result);
   }
 };

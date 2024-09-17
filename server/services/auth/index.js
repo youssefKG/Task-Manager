@@ -81,7 +81,6 @@ const register = async ({
       password: hashPassword,
     });
   } catch (err) {
-    console.log(err);
     throw new CustomError(err.message, err.code, err.result);
   }
 };
@@ -89,8 +88,6 @@ const register = async ({
 const verifyToken = async (token) => {
   try {
     const decodedUserData = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-    console.log("decoded data", decodedUserData);
 
     const findUser = await userRepository.findUserById(decodedUserData.id);
 
@@ -103,7 +100,6 @@ const verifyToken = async (token) => {
 
     return decodedUserData;
   } catch (err) {
-    console.log(err);
     throw new CustomError(
       "Invalid token or user not found. Please log in again.",
       err.status,
