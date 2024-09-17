@@ -2,8 +2,14 @@ const authService = require("../../services/auth");
 
 const register = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
-    await authService.register({ firstName, lastName, email, password });
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    await authService.register({
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+    });
 
     res
       .status(201)
@@ -22,25 +28,25 @@ const login = async (req, res, next) => {
       password,
     }); // othersUserInfo = {firstName , lastName, email, id}
 
-    res
-      .cookie("access_token", token, { httpOnly: true })
-      .status(201)
-      .json(othersUserInfo);
+    res.cookie("access_token", token, { httpOnly: true }).status(201).json({
+      message: "Login success.",
+      result: othersUserInfo,
+    });
   } catch (err) {
     console.log(err);
     next(err);
   }
 };
 
-const signOut = async (req, res, next) => {
+const logout = async (req, res, next) => {
   try {
-    res
-      .status(200)
-      .clearCookie("aaccess_token")
-      .json("user has been logged out ! ");
+    res.status(200).clearCookie("access_token").json({
+      message: "You logout successfully.",
+      result: null,
+    });
   } catch (err) {
     next(err);
   }
 };
 
-module.exports = { register, login, signOut };
+module.exports = { register, login, logout };

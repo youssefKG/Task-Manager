@@ -3,10 +3,9 @@ const app = express();
 const cors = require("cors");
 const dotenv = require("dotenv");
 const cookie_parser = require("cookie-parser");
-const taskRoute = require("./routes/task.route");
 const authRoute = require("./routes/auth");
-const userRoute = require("./routes/user.route");
-const { dbConnection } = require("./db/db");
+const taskRoute = require("./routes/task");
+const { dbConnection } = require("./db");
 
 const port = process.env.PORT;
 const path = require("path");
@@ -22,9 +21,8 @@ app.use(
   }),
 );
 
-app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/tasks", taskRoute);
+app.use("/api/task", taskRoute);
 
 // app.use(express.static(path.json(___dirname, '/client/build')))
 

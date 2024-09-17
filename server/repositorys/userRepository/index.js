@@ -1,17 +1,21 @@
 const User = require("../../models/User");
 const CustomError = require("../../utils/customError");
 
-const createNewUser = async ({ firstName, lastName, email, password }) => {
+const createUser = async ({ firstName, lastName, email, password }) => {
   try {
-    const newUser = await UserModel.create({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+    const newUser = await User.create(
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+      },
+      { fields: ["firstName", "lastName", "email", "password"] },
+    );
     return newUser;
   } catch (err) {
     console.log(err);
+    throw new CustomError(err.message, err.status, err?.result);
   }
 };
 
@@ -36,9 +40,9 @@ const findUserById = async (userID) => {
   }
 };
 
-const updateUserData = async (newValue) => {
+const updateUserData = async (id, newUserData) => {
   try {
-    await User.update(newValue);
+    await User.update(newUserData, { where: { id } });
   } catch (err) {
     throw err;
   }
@@ -46,7 +50,7 @@ const updateUserData = async (newValue) => {
 
 module.exports = {
   updateUserData,
-  createNewUser,
+  createUser,
   findUserByEmail,
   findUserById,
 };

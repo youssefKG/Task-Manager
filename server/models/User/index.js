@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { DB } = require("../../db/db");
+const { DB } = require("../../db");
 
 const User = DB.define(
   "users",
@@ -30,6 +30,5 @@ const User = DB.define(
   { timestamps: true },
 );
 
-User.sync({ force: true });
-
+User.sync({ alter: true });
 module.exports = User;

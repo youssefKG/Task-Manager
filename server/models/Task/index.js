@@ -1,18 +1,18 @@
 const { DataTypes } = require("sequelize");
-const { DB } = require("../../db/db");
-const User = require("../User");
+const { DB } = require("../../db");
+const User = require("../User/index");
 
 const Task = DB.define(
   "tasks",
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: NULL,
+      allowNull: false,
     },
     content: {
       type: DataTypes.STRING,
@@ -21,16 +21,17 @@ const Task = DB.define(
     isImportant: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
-    completed: {
+    IsCompleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
     userId: {
       type: DataTypes.UUID,
-      allowNull: true,
       references: {
-        model: "users",
+        model: User,
         key: "id",
       },
     },
@@ -38,6 +39,7 @@ const Task = DB.define(
   { timestamps: true },
 );
 
-Task.sync({ force: true });
+// Task.hasOne(User);
+Task.sync({ alter: true });
 
 module.exports = Task;

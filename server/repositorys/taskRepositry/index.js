@@ -1,6 +1,7 @@
 const Task = require("../../models/Task");
+const CustomError = require("../../utils/customError");
 
-const findUserTasks = async (userId) => {
+const userTasks = async (userId) => {
   try {
     const tasks = await Task.findAll({
       where: { userId },
@@ -8,80 +9,50 @@ const findUserTasks = async (userId) => {
 
     return tasks;
   } catch (err) {
-    console.log(err);
-  }
-};
-const createTask = async (newTaskData) => {
-  try {
-    const newTask = await Task.create(newTaskData, {
-      fields: ["title", "content", "isImporant", "isCompleted"],
-    });
-  } catch (err) {
-    console.log(err);
-    throw err;
+    throw new CustomError(err.messgae, err.status, err);
   }
 };
 
-const deleteTask = async (id) => {
+const createTask = async (taskData) => {
+  try {
+    const newTask = await Task.create(taskData, {
+      fields: ["title", "content", "isImporant", "isCompleted", "userId"],
+    });
+
+    return newTask;
+  } catch (err) {
+    throw new CustomError(err.messgae, err.status, err);
+  }
+};
+
+const deleteTask = async (userId, id) => {
   try {
     await Task.destroy({
       where: { id },
     });
   } catch (err) {
     console.log(err);
-    throw err;
+    throw new CustomError(err.messgae, err.status, err);
   }
 };
 
-const updateTask = async (newTaskData) => {
+const updateTask = async (id, newTaskData) => {
   try {
-    await Task.update(newTaskData, {
-      where: {
-        id: newTaskData.id,
-      },
+    const updatedTask = await Task.update(newTaskData, {
+      where: { id },
       fields: ["title", "content", "isImporant", "isCompleted"],
     });
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
 
-const toggleImportant = async (taskId, newIsImportantValue) => {
-  try {
-    await Task.update(
-      { isImporant: newIsImportantValue },
-      {
-        where: { id: taskId },
-        fields: ["isImporant"],
-      },
-    );
+    return updatedTask;
   } catch (err) {
     console.log(err);
-    throw err;
-  }
-};
-
-const toggleCompleted = async (taskId, newComletedValue) => {
-  try {
-    await Task.update(
-      { isImporant: newComletedValue },
-      {
-        where: { id: taskId },
-        fields: ["isCompleted"],
-      },
-    );
-  } catch (err) {
-    console.log(err);
-    throw err;
+    throw new CustomError(err.messgae, err.status, err);
   }
 };
 
 module.exports = {
-  findUserTasks,
+  userTasks,
   createTask,
   deleteTask,
   updateTask,
-  toggleImportant,
-  toggleCompleted,
 };

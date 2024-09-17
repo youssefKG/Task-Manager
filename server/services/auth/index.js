@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const validator = require("../../validator");
 const userRepository = require("../../repositorys/userRepository");
+const dotenv = require("dotenv");
 
 const login = async ({ email, password }) => {
   try {
@@ -15,7 +16,7 @@ const login = async ({ email, password }) => {
         null,
       );
 
-    const isCorrectPassword = bcrypt.compare(password, findUser.password);
+    const isCorrectPassword = bcrypt.compareSync(password, findUser.password);
 
     if (!isCorrectPassword)
       throw new CustomError(
@@ -24,14 +25,17 @@ const login = async ({ email, password }) => {
         null,
       );
 
-    const { password, ...others } = findUser;
+    const { firstName, lastName, id } = findUser;
 
-    const token = jwt.sign(others, process.env.JWT_KEY);
+    const token = jwt.sign(
+      { id, email, firstName, lastName },
+      process.env.JWT_SECRET_KEY,
+    );
 
     return {
-      id: findUser.id,
-      firstName: findUser.firstName,
-      lastName: findUser.lastName,
+      id,
+      firstName,
+      lastName,
       email,
       token,
     };
@@ -56,7 +60,7 @@ const register = async ({
       confirmPassword,
     });
 
-    if (!error)
+    if (error)
       throw new CustomError(
         "Please fill out all required fields with valid information.",
         422,
@@ -65,16 +69,16 @@ const register = async ({
 
     const findUser = await userRepository.findUserByEmail(email);
 
-    if (!findUser)
+    if (findUser)
       throw new CustomError("Account with this email already exists");
 
     const hashPassword = bcrypt.hashSync(password, 8);
 
-    await userRepository.createNewUser({
+    await userRepository.createUser({
       firstName,
       lastName,
       email,
-      hashPassword,
+      password: hashPassword,
     });
   } catch (err) {
     console.log(err);
@@ -84,16 +88,15 @@ const register = async ({
 
 const verifyToken = async (token) => {
   try {
-    const decodedUserData = await jwt.verify.verify(
-      token,
-      process.env.JWT_SECRET_KEY,
-    );
+    const decodedUserData = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    const findUser = await userRepository.findUserById(decodedUserData);
+    console.log("decoded data", decodedUserData);
+
+    const findUser = await userRepository.findUserById(decodedUserData.id);
 
     if (!findUser)
       throw new CustomError(
-        "Invalid or expired token. Please try again.",
+        "Invalid token or user not found. Please log in again.",
         401,
         null,
       );
@@ -101,7 +104,11 @@ const verifyToken = async (token) => {
     return decodedUserData;
   } catch (err) {
     console.log(err);
-    new CustomError(err.message, err.status, err?.result);
+    throw new CustomError(
+      "Invalid token or user not found. Please log in again.",
+      err.status,
+      err?.result,
+    );
   }
 };
 
