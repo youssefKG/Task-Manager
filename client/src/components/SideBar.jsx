@@ -44,7 +44,7 @@ const SideBar = () => {
           <h
             className={`text-xl font-semibold ${theme === "dark" ? "text-white" : "text-black"}  tracking-wide flex flex-col`}
           >
-            {currentUser.firstName} <span>{currentUser.lastName}</span>
+            {currentUser?.firstName} <span>{currentUser?.lastName}</span>
           </h>
         </div>
         {showDropDownProfil && (

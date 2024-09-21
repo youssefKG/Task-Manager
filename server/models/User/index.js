@@ -30,5 +30,5 @@ const User = DB.define(
   { timestamps: true },
 );
 
-User.sync({ alter: true });
+// User.sync({ alter: true });
 module.exports = User;

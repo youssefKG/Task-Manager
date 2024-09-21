@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const validator = require("../../validator");
 const userRepository = require("../../repositorys/userRepository");
-const dotenv = require("dotenv");
 
 const login = async ({ email, password }) => {
   try {

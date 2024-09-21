@@ -1,29 +1,12 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import instance from "../config/axios";
+import { Link } from "react-router-dom";
+import { Formik, Form } from "formik";
 import { PropagateLoader } from "react-spinners";
+import { useAuth } from "../context/authContext";
+import { loginInputSchema, initialLoginInputsValue } from "../lib/auth";
+import TextInput from "../components/TextInput";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const navigate = useNavigate();
-  const handleFormDataChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await instance.post("/auth/regsiter", formData);
-      console.log(res);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { loginSubmit, isLoginLoading } = useAuth();
 
   return (
     <div className="flex w-full gap-6  h-screen bg-[#1B1B1B] text-white">
@@ -35,11 +18,9 @@ const Login = () => {
         />
         <div className="left-16 absolute top-1/4">
           <h1 className="text-3xl text-gray-300  tracking-widest font-bold">
-            {" "}
             Hello.
           </h1>
           <h1 className="text-3xl text-gray-300  tracking-widest font-bold">
-            {" "}
             Welcome Back!
           </h1>
           <p className="text-gray-400 max-w-lg font-[500] text-[15px] mt-8 indent-4">
@@ -59,7 +40,6 @@ const Login = () => {
             Login
           </h1>
           <button
-            onClick={handleGoogleAuht}
             className="bg-white/80 p-3 flex items-center justify-center gap-2
             text-center font-semibold tracking-widest rounded-lg text-black
             hover:opacity-80"
@@ -71,59 +51,57 @@ const Login = () => {
             />
             <h1>Continue with Google</h1>
           </button>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex items-center">
-              <div className="h-[1px] w-full bg-gray-400" />
-              <p className="mx-2 text-lg text-white">OR</p>
-              <div className="h-[1px] w-full bg-gray-400" />
-            </div>
-            <div className="flex flex-col gap-4 ">
-              <input
-                type="email"
-                className="bg-white/0 border-b-[1px] border-gray-600 flex-1 p-2
-                focus:outline-none tracking-wide placeholder  "
-                placeholder="Your@gmail.com"
-                name="email"
-                onChange={handleFormDataChange}
-                value={formData.value}
-                required
-              />
-              <input
-                type="password"
-                className="bg-white/0 border-b-[1px] border-gray-600 flex-1 p-2
-                focus:outline-none tracking-wide placeholder  "
-                placeholder="Password"
-                name="password"
-                onChange={handleFormDataChange}
-                value={formData.password}
-                required
-              />
-            </div>
+          <Formik
+            initialValues={initialLoginInputsValue}
+            onSubmit={loginSubmit}
+            validationSchema={loginInputSchema}
+          >
+            <Form className="flex flex-col gap-4">
+              <div className="flex items-center">
+                <div className="h-[1px] w-full bg-gray-400" />
+                <p className="mx-2 text-lg text-white">OR</p>
+                <div className="h-[1px] w-full bg-gray-400" />
+              </div>
+              <div className="flex flex-col gap-4 ">
+                <TextInput
+                  type="email"
+                  placeholder="Your@gmail.com"
+                  name="email"
+                  required
+                />
+                <TextInput
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  required
+                />
+              </div>
 
-            <button
-              className="bg-black/50 p-3 text-center   font-semibold
+              <button
+                type="submit"
+                className="bg-black/50 p-3 text-center   font-semibold
               tracking-widest rounded-lg text-white hover:opacity-80
               uppercase"
-            >
-              {!laoding ? (
-                "Sign In"
-              ) : (
-                <div className="p-3">
-                  <PropagateLoader color="white" size={5} />
-                </div>
-              )}
-            </button>
-            {error && <p className="text-red-700 text-center ">{error}</p>}
-            <p className="text-gray-400 text-center">
-              if you dont have a account?
-              <Link
-                to="/signup"
-                className="text-blue-600 ml-2 underline underline-offset-2 "
               >
-                Sing Up
-              </Link>
-            </p>
-          </form>
+                {!isLoginLoading ? (
+                  "Sign In"
+                ) : (
+                  <div className="p-3">
+                    <PropagateLoader color="white" size={5} />
+                  </div>
+                )}
+              </button>
+              <p className="text-gray-400 text-center">
+                if you dont have a account?
+                <Link
+                  to="/signup"
+                  className="text-blue-600 ml-2 underline underline-offset-2 "
+                >
+                  Sing Up
+                </Link>
+              </p>
+            </Form>
+          </Formik>
         </div>
       </div>
     </div>

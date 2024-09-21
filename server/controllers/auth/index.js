@@ -11,9 +11,10 @@ const register = async (req, res, next) => {
       confirmPassword,
     });
 
-    res
-      .status(201)
-      .json("Account created successfully. You can now login now.");
+    res.status(201).json({
+      message: "Account created successfully. You can now login now.",
+      result: null,
+    });
   } catch (err) {
     next(err);
   }

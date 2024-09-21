@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 const NotificationContext = createContext(null);
@@ -11,10 +11,20 @@ const NotificationContextProvider = ({ children }) => {
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
-      <ToastContainer autoClose={4000} draggable={true} position="top-center" />
+      <ToastContainer
+        style={{ color: "white" }}
+        position="top-center"
+        draggable
+        autoClose={3000}
+        theme="colored"
+      />
     </NotificationContext.Provider>
   );
 };
 
 export default NotificationContextProvider;
+
+export const useNotification = () => {
+  return useContext(NotificationContext);
+};
 export { NotificationContext };

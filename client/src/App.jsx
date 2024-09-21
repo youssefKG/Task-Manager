@@ -3,11 +3,7 @@ import GlobalContextProvider from "./context/GlobalContext";
 import AppRoute from "./routes";
 
 function App() {
-  return (
-    <GlobalContextProvider>
-      <AppRoute />
-    </GlobalContextProvider>
-  );
+  return <AppRoute />;
 }
 
 export default App;
