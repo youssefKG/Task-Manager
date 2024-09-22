@@ -10,7 +10,7 @@ const PrivateLayout = () => {
   useEffect(() => {
     console.log("current user", currentUser);
   }, [currentUser]);
-  return currentUser ? <Layout /> : <Navigate to="/login" />;
+  return currentUser ? <Layout /> : <Navigate to="/auth/login" />;
 };
 
 export default PrivateLayout;

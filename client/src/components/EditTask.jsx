@@ -3,6 +3,7 @@ import { PropagateLoader } from "react-spinners";
 import { FiEdit } from "react-icons/fi";
 import BackDropLayout from "../layouts/BackDropLayout";
 import { TasksContext } from "../context/taskContextProvider";
+import { createTask } from "../api/task";
 
 const EditTask = () => {
   const ref = useRef();
@@ -20,15 +21,15 @@ const EditTask = () => {
   // edit task input state
   const [editTaskData, setEditTaskData] = useState({
     title: "",
-    description: "",
-    date: "",
-    isrCompleted: false,
-    isrImportant: false,
+    content: "",
+    createdAt: "",
+    IsCompleted: false,
+    isImportant: false,
   });
 
   // change state when the input change in edit edit task back drop
   const handleTaskDataChange = (e) => {
-    if (e.target.name === "completed" || e.target.name === "important")
+    if (e.target.name === "IsCompleted" || e.target.name === "isImportant")
       setEditTaskData({ ...editTaskData, [e.target.name]: e.target.checked });
     if (
       e.target.name === "title" ||
@@ -94,7 +95,7 @@ const EditTask = () => {
               cols="30"
               rows="4"
               onChange={handleTaskDataChange}
-              value={editTaskData.description}
+              value={editTaskData.content}
               required
             ></textarea>
           </div>
@@ -105,7 +106,7 @@ const EditTask = () => {
               className=" bg-black rounded-lg p-3 text-white placeholder:text-gray-500 placeholder:font-semibold"
               placeholder="Title..."
               name="date"
-              value={editTaskData.date}
+              value={editTaskData.createdAt.split("T")[0]}
               onChange={handleTaskDataChange}
               required
             />
@@ -117,8 +118,8 @@ const EditTask = () => {
             <input
               type="checkbox"
               className=" accent-blue-600 w-4 h-4"
-              name="completed"
-              checked={editTaskData.isrCompleted}
+              name="IsCompleted"
+              checked={editTaskData.IsCompleted}
               onChange={handleTaskDataChange}
             />
           </div>
@@ -129,8 +130,8 @@ const EditTask = () => {
             <input
               type="checkbox"
               className=" accent-blue-600 w-4 h-4"
-              name="important"
-              checked={editTaskData.isrImportant}
+              name="isImportant"
+              checked={editTaskData.isImportant}
               onChange={handleTaskDataChange}
             />
           </div>

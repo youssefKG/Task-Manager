@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import BackDrops from "../components/BackDrop";
-import GlobalContextProvider from "../context/GlobalContext";
 
 const Layout = () => {
   return (

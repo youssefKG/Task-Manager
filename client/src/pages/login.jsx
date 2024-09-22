@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { Formik, Form } from "formik";
 import { PropagateLoader } from "react-spinners";
 import { useAuth } from "../context/authContext";
 import { loginInputSchema, initialLoginInputsValue } from "../lib/auth";
 import TextInput from "../components/TextInput";
+import FormWrapper from "../components/Form";
 
 const Login = () => {
   const { loginSubmit, isLoginLoading } = useAuth();
@@ -27,7 +27,7 @@ const Login = () => {
             TaskMaster is a user-friendly web application designed to streamline
             and organize your daily tasks and responsibilities. With TaskMaster,
             you can easily create, prioritize, and track your to-do lists,
-            ensuring you stay on top of your work and personal projects.
+            ensuring you stay on top of your work and projects.
           </p>
         </div>
       </div>
@@ -51,57 +51,56 @@ const Login = () => {
             />
             <h1>Continue with Google</h1>
           </button>
-          <Formik
+          <FormWrapper
             initialValues={initialLoginInputsValue}
             onSubmit={loginSubmit}
             validationSchema={loginInputSchema}
+            className="flex flex-col gap-4"
           >
-            <Form className="flex flex-col gap-4">
-              <div className="flex items-center">
-                <div className="h-[1px] w-full bg-gray-400" />
-                <p className="mx-2 text-lg text-white">OR</p>
-                <div className="h-[1px] w-full bg-gray-400" />
-              </div>
-              <div className="flex flex-col gap-4 ">
-                <TextInput
-                  type="email"
-                  placeholder="Your@gmail.com"
-                  name="email"
-                  required
-                />
-                <TextInput
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  required
-                />
-              </div>
+            <div className="flex items-center">
+              <div className="h-[1px] w-full bg-gray-400" />
+              <p className="mx-2 text-lg text-white">OR</p>
+              <div className="h-[1px] w-full bg-gray-400" />
+            </div>
+            <div className="flex flex-col gap-4 ">
+              <TextInput
+                type="email"
+                placeholder="Your@gmail.com"
+                name="email"
+                required
+              />
+              <TextInput
+                type="password"
+                placeholder="Password"
+                name="password"
+                required
+              />
+            </div>
 
-              <button
-                type="submit"
-                className="bg-black/50 p-3 text-center   font-semibold
+            <button
+              type="submit"
+              className="bg-black/50 p-3 text-center   font-semibold
               tracking-widest rounded-lg text-white hover:opacity-80
               uppercase"
+            >
+              {!isLoginLoading ? (
+                "Login"
+              ) : (
+                <div className="p-3">
+                  <PropagateLoader color="white" size={5} />
+                </div>
+              )}
+            </button>
+            <p className="text-gray-400 text-center">
+              if you dont have a account?
+              <Link
+                to="/auth/register"
+                className="text-blue-600 ml-2 underline underline-offset-2 "
               >
-                {!isLoginLoading ? (
-                  "Sign In"
-                ) : (
-                  <div className="p-3">
-                    <PropagateLoader color="white" size={5} />
-                  </div>
-                )}
-              </button>
-              <p className="text-gray-400 text-center">
-                if you dont have a account?
-                <Link
-                  to="/signup"
-                  className="text-blue-600 ml-2 underline underline-offset-2 "
-                >
-                  Sing Up
-                </Link>
-              </p>
-            </Form>
-          </Formik>
+                Register
+              </Link>
+            </p>
+          </FormWrapper>
         </div>
       </div>
     </div>

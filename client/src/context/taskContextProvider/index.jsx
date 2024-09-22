@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { fetchUserTasks } from "../../api/task";
 import instanceAxios from "../../config/axios";
 
 const TasksContext = createContext();
@@ -10,10 +11,10 @@ const TasksContextProvider = ({ children }) => {
   // initail state when edit back drop is open
   const [initialEditTaskData, setInitialEditTaskData] = useState({
     title: "",
-    description: "",
-    data: "",
-    isImportant: true,
-    isCompleted: false,
+    content: "",
+    createdAt: "",
+    IsCompleted: false,
+    isImportant: false,
   });
 
   // data that shown when task detail back drop is open
@@ -112,11 +113,11 @@ const TasksContextProvider = ({ children }) => {
     // fetch all tasks
     const fetchAllTasks = async () => {
       try {
-        const res = await instanceAxios.get("/tasks/allTasks");
-
-        setTasks(res.data);
+        const res = await fetchUserTasks();
+        console.log("all tasks", res);
+        setTasks(res.result);
       } catch (err) {
-        console.log(err);
+        console.log("all tasks", err);
       }
     };
 

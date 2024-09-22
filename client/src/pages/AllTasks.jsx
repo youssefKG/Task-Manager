@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
-import GlobalContextProvider, { GlobalContext } from "../context/GlobalContext";
+import { useState, useContext, useRef, useEffect } from "react";
+import { GlobalContext } from "../context/GlobalContext";
 import TaskCard from "../components/TaskCard";
 import { TasksContext } from "../context/taskContextProvider";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useNotification } from "../context/notificationContext";
 
 const AllTasks = () => {
   // task context
@@ -15,11 +16,16 @@ const AllTasks = () => {
     openTaskDetailBackDrop,
   } = useContext(TasksContext);
 
-  const [loading] = useState(false);
+  const { showNotification } = useNotification();
+
+  const [loading, setIsLoading] = useState(false);
+  const [offeset, setOffest] = useState(0);
+  const allTasksRef = useRef(null);
   const { theme } = useContext(GlobalContext);
 
   return (
     <div
+      ref={allTasksRef}
       className={`flex  flex-col relative gap-8 w-full ${
         theme === "dark" ? "bg-[#1B1B1B] text-white" : "bg-gray-200 text-black"
       }    border-gray-800 rounded-xl border p-6`}
@@ -71,4 +77,5 @@ const AllTasks = () => {
     </div>
   );
 };
+
 export default AllTasks;

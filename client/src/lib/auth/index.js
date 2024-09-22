@@ -1,4 +1,4 @@
-import { string, object } from "yup";
+import { string, object, ref } from "yup";
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
@@ -32,4 +32,7 @@ export const registetInputsSchema = object({
     .required("Required"),
   email: string().email("Invalid email adress").required("Required"),
   password: string().matches(passwordRegex).required("Required"),
+  confirmPassword: string()
+    .oneOf([ref("password"), null], "Passwords must match")
+    .required("Required"),
 });
